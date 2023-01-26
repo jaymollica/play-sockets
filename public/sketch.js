@@ -1,12 +1,19 @@
-var socket;
+let socket = io();
+
+//Listen for confirmation of connection
+socket.on('connect', function() {
+    console.log("Connected");
+});
 
 function setup() {
 	createCanvas(windowWidth,windowHeight);
 	background(51);
 
 
-	socket = io.connect('http://localhost:3000');
+	//socket = io.connect('http://localhost:3000');
 	socket.on('mouse', newDrawing);
+
+
 }
 
 function newDrawing(data) {
