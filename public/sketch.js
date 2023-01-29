@@ -1,12 +1,53 @@
+window.addEventListener('load', function() {
+
+	var elements = document.getElementsByClassName("artwork");
+
+	for (var i = 0; i < elements.length; i++) {
+	    elements[i].addEventListener('click', getArtwork, false);
+	}
+
+	function getArtwork() {
+	    var which = this.getAttribute("data-which");
+
+	    var data = {
+	    	img: which,
+	    }
+
+	    socket.emit("swapArtMsg", data);
+
+	};
+
+	socket.on('swapArt', updateStage);
+
+	function updateStage(data) {
+		document.getElementById("stage").innerHTML = "";
+		document.getElementById("stage").innerHTML = data.img;
+	}
+
+});
+
+
+let myPath = window.location.pathname;
+let myColor = "magenta";
+let otherColor = "cyan";
+
+if(myPath.includes('follow')) {
+
+	myColor = "cyan";
+	otherColor = "magenta";
+
+}
+
 let socket = io();
 
 //Listen for confirmation of connection
 socket.on('connect', function() {
+
     console.log("Connected");
 });
 
 function setup() {
-	createCanvas(windowWidth,windowHeight);
+	createCanvas(300,300);
 	background(51);
 
 
@@ -18,7 +59,7 @@ function setup() {
 
 function newDrawing(data) {
 	noStroke();
-	fill(255, 0, 100);
+	fill(myColor);
 	ellipse(data.x, data.y, 60, 60);
 }
 
@@ -32,7 +73,7 @@ function mouseDragged() {
 
 
 	noStroke();
-	fill(255);
+	fill(otherColor);
 	ellipse(mouseX, mouseY, 60, 60);
 }
 
@@ -40,3 +81,17 @@ function draw() {
 	
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
